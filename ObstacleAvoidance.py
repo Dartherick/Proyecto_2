@@ -1,6 +1,4 @@
 import dronekit
-import socket
-import exceptions
 import RPi.GPIO as GPIO
 import time
 
