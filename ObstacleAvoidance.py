@@ -2,6 +2,8 @@ import dronekit
 import RPi.GPIO as GPIO
 import time
 
+#AVOID_MARGIN
+
 #{TRIG,ECHO}
 FrontSensor = {4,17}
 BackSensor = {27,22}
