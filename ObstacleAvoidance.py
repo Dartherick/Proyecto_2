@@ -2,8 +2,6 @@ import dronekit
 import RPi.GPIO as GPIO
 import time
 
-#AVOID_MARGIN
-
 #{TRIG,ECHO}
 FrontSensor = {4,17}
 BackSensor = {27,22}
@@ -70,8 +68,10 @@ def measure(Sensor):
     return dist1
 
 # Main code
-if __Name__ == __Main__:
-	while True:
-	    d = measure()
-	    time.sleep(0.1)
-	    print(d)
+#if __Name__ == __main__:
+while True:
+    d = measure()
+    time.sleep(0.1)
+    print(d)
+
+print('temp')
