@@ -1,5 +1,6 @@
 import dronekit
 import RPi.GPIO as GPIO
+import gpiozero
 import time
 
 #{TRIG,ECHO}
