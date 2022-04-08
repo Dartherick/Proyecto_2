@@ -1,3 +1,4 @@
+import threading
 import dronekit
 import time
 
@@ -11,7 +12,7 @@ while not Drone.is_armable:
 	time.sleep(1)
 
 if (Drone.armed):
-	Drone.armed   = False
+	Drone.armed  = False
 	print("Unarmed")
 else:
 	Drone.armed   = True
