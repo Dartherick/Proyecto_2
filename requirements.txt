@@ -1,5 +1,7 @@
-distlib==0.3.4
-filelock==3.6.0
-platformdirs==2.5.1
-six==1.16.0
-virtualenv==20.14.0
+colorzero==2.0
+dronekit==2.9.2
+future==0.18.2
+gpiozero==1.6.2
+lxml==4.8.0
+monotonic==1.6
+pymavlink==2.4.29
