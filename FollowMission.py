@@ -75,7 +75,7 @@ gnd_speed = 10
 mode = 'Ground'
 
 #---------Connect
-vehicle = dronekit.connect('/dev/serial0', wait_ready=True, baud=921600)
+vehicle = connect('/dev/serial0', wait_ready=True, baud=921600)
 
 #Main function
 while True:
