@@ -45,6 +45,5 @@ def Measure():
         Distance = gpiozero.DistanceSensor(ECHO_PINS[i],TRIGGER_PINS[i]).distance()
         SensorData(Distance,Orientation[i])
 
-
 # Main code
 #if __Name__ == __main__:
