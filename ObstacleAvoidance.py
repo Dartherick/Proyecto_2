@@ -15,13 +15,16 @@ TRIGGER_PINS = {"Front":4,"Back":27,"Right":10,"Left":11}
 
 Orientation = {"Front":0, "Front-Right":1 ,"Right":2 ,"Back-Right":3 ,"Back":4 ,"Back-Left":5 ,"Left":6 ,"Front-Left":7, "Up":24 ,"Down":25}
 
-'''FrontSensor = gpiozero.DistanceSensor(ECHO_PINS["Front"],TRIGGER_PINS["Front"])
+FrontSensor = gpiozero.DistanceSensor(ECHO_PINS["Front"],TRIGGER_PINS["Front"])
 BackSensor = gpiozero.DistanceSensor(ECHO_PINS["Back"],TRIGGER_PINS["Back"])
 RightSensor = gpiozero.DistanceSensor(ECHO_PINS["Right"],TRIGGER_PINS["Right"])
-LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])'''
+LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])
+
+Sensors = {"Front":FrontSensor, "Back":BackSensor, "Right":RightSensor, "Left":LeftSensor}
+
 
 #Connects to the vehicle using serial port.
-vehicle = dronekit.connect('/dev/ttyS0', wait_ready=True, baud=57600)
+vehicle = dronekit.connect('/dev/serial0', wait_ready=True, baud=921600)
 
 #Function to convert distance and orientation into a mavlink message
 def SensorData(d,o):
@@ -39,11 +42,12 @@ def SensorData(d,o):
 
 #Simple function to measure the distance using ultrasonic sensor
 def Measure():
-    Sensors = {"Front","Back","Right","Left"}
+    SensorsName = {"Front","Back","Right","Left"}
 
-    for i in Sensors:
-        Distance = gpiozero.DistanceSensor(ECHO_PINS[i],TRIGGER_PINS[i]).distance()
+    for i in SensorsName:
+        Distance = Sensors.distance() * 100
         SensorData(Distance,Orientation[i])
+        print(f"{SensorsName} = {Distance} cm")
 
-# Main code
-#if __Name__ == __main__:
+while True:
+    Measure()
