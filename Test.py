@@ -6,7 +6,6 @@ and sends them to the fc. The argument distance takes values in cm and orientati
 For addition of more sensors, the distance can be collected and sent via the sensor_data function with the correct orientation.
 '''
 
-import dronekit
 import gpiozero
 import time
 
@@ -21,24 +20,7 @@ RightSensor = gpiozero.DistanceSensor(ECHO_PINS["Right"],TRIGGER_PINS["Right"])
 LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])
 
 Sensors = {"Front":FrontSensor, "Back":BackSensor, "Right":RightSensor, "Left":LeftSensor}
-
-
-#Connects to the vehicle using serial port.
-vehicle = dronekit.connect('/dev/serial0', wait_ready=True, baud=921600)
-
-#Function to convert distance and orientation into a mavlink message
-def SensorData(d,o):
-    msg=vehicle.message_factory.distance_sensor_encode(
-        0,          # Time since system boot (ignored)
-        5,          # Min distance cm
-        250,        # Max distance cm
-        int(d),     # Current distance, must be int
-        0,          # Type of sensor (ignored)
-        0,          # Onboard id (ignored)
-        o,          # Orientation
-        0,          # Covariance (ignored)
-        )
-    vehicle.send_mavlink(msg)
+Sensors1 = [FrontSensor, BackSensor, RightSensor, LeftSensor]
 
 #Simple function to measure the distance using ultrasonic sensor
 def Measure():
@@ -46,8 +28,14 @@ def Measure():
 
     for i in SensorsName:
         Distance = Sensors[i].distance * 100
-        SensorData(Distance,Orientation[i])
         print(f"{i} = {Distance} cm")
+        time.sleep(1)
+
+
+def Measure1():
+    Distance = FrontSensor.distance * 100
+    print(f"{Distance} cm")
 
 while True:
     Measure()
+    
