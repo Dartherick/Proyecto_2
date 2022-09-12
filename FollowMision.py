@@ -8,9 +8,9 @@ from pymavlink import mavutil
 # Connect to the Vehicle
 vehicle = connect('/dev/serial0', wait_ready=True, baud=921600)
 
-def get_location_metres(original_location, dNorth, dEast):
+def get_location(original_location, dNorth, dEast):
     """
-    Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the 
+    Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` meters from the 
     specified `original_location`. The returned Location has the same `alt` value
     as `original_location`.
 
@@ -32,12 +32,14 @@ def get_location_metres(original_location, dNorth, dEast):
     return LocationGlobal(newlat, newlon,original_location.alt)
 
 
-def get_distance_metres(aLocation1, aLocation2):
+def get_distance(aLocation1, aLocation2):
     """
-    Returns the ground distance in metres between two LocationGlobal objects.
+    Returns the ground distance in meters between two LocationGlobal objects.
 
     This method is an approximation, and will not be accurate over large distances and close to the 
-    earth's poles. It comes from the ArduPilot test code: 
+    earth's poles. 
+    
+    It comes from the ArduPilot test code: 
     https://github.com/diydrones/ardupilot/blob/master/Tools/autotest/common.py
     """
     dlat = aLocation2.lat - aLocation1.lat
@@ -48,7 +50,7 @@ def get_distance_metres(aLocation1, aLocation2):
 
 def distance_to_current_waypoint():
     """
-    Gets distance in metres to the current waypoint. 
+    Gets distance in meters to the current waypoint. 
     It returns None for the first waypoint (Home location).
     """
     nextwaypoint = vehicle.commands.next
@@ -61,7 +63,7 @@ def distance_to_current_waypoint():
     lon = missionitem.y
     alt = missionitem.z
     targetWaypointLocation = LocationGlobalRelative(lat,lon,alt)
-    distancetopoint = get_distance_metres(vehicle.location.global_frame, targetWaypointLocation)
+    distancetopoint = get_distance(vehicle.location.global_frame, targetWaypointLocation)
     return distancetopoint
 
 
@@ -72,7 +74,6 @@ def download_mission():
     cmds = vehicle.commands
     cmds.download()
     cmds.wait_ready() # wait until download is complete.
-
 
 
 def adds_square_mission(aLocation, aSize):
@@ -96,10 +97,10 @@ def adds_square_mission(aLocation, aSize):
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, 10))
 
     #Define the four MAV_CMD_NAV_WAYPOINT locations and add the commands
-    point1 = get_location_metres(aLocation, aSize, -aSize)
-    point2 = get_location_metres(aLocation, aSize, aSize)
-    point3 = get_location_metres(aLocation, -aSize, aSize)
-    point4 = get_location_metres(aLocation, -aSize, -aSize)
+    point1 = get_location(aLocation, aSize, -aSize)
+    point2 = get_location(aLocation, aSize, aSize)
+    point3 = get_location(aLocation, -aSize, aSize)
+    point4 = get_location(aLocation, -aSize, -aSize)
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, 11))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, 12))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, 13))
@@ -110,12 +111,10 @@ def adds_square_mission(aLocation, aSize):
 
     print(" Upload new commands to vehicle")
     cmds.upload()
-
+    
 
 def arm_and_takeoff(aTargetAltitude):
-    """
-    Arms vehicle and fly to aTargetAltitude.
-    """
+    #Arms vehicle and fly to aTargetAltitude.
 
     print("Basic pre-arm checks")
     # Don't let the user try to arm until autopilot is ready
@@ -150,7 +149,6 @@ print('Create a new mission (for current location)')
 adds_square_mission(vehicle.location.global_frame,50)
 
 
-# From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(10)
 
 print("Starting mission")
@@ -171,12 +169,14 @@ while True:
     nextwaypoint=vehicle.commands.next
     print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
   
-    if nextwaypoint==3: #Skip to next waypoint
+    if nextwaypoint == 3: #Skip to next waypoint
         print('Skipping to Waypoint 5 when reach waypoint 3')
         vehicle.commands.next = 5
-    if nextwaypoint==5: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+
+    if nextwaypoint == 5: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break
+
     time.sleep(1)
 
 print('Return to launch')
