@@ -76,6 +76,12 @@ def download_mission():
     cmds.wait_ready() # wait until download is complete.
 
 
+def Clear_Mission():
+    cmds = vehicle.commands()
+    cmds.clear()
+    vehicle.flush()
+
+
 def adds_square_mission(aLocation, aSize):
     """
     Adds a takeoff command and four waypoint commands to the current mission. 

@@ -1,5 +1,5 @@
 import time 
-from dronekit import connect, VehicleMode, LocationGlobalRelative, Command, LocationGlobal
+from dronekit import connect, VehicleMode, LocationGlobalRelative, Command, LocationGlobal, vehicleMode
 from pymavlink import mavutil
 
 #Arm and takeoff
@@ -90,10 +90,10 @@ while True:
 
     elif mode == 'TAKEOFF':
         #Add the current position as last waypoint
-        add_last_waypoint_to_mission(vehicle,
-                                     vehicle.location.gloval_relative_frame.lat,
-                                     vehicle.location.global_relative_frame.lon,
-                                     vehicle.location.global_relative_frame.alt)
+        add_last_waypoint(vehicle,
+                            vehicle.location.gloval_relative_frame.lat,
+                            vehicle.location.global_relative_frame.lon,
+                            vehicle.location.global_relative_frame.alt)
         
         print('Final waypoint added to the current mission')
         time.sleep(1)
