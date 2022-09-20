@@ -5,3 +5,4 @@ gpiozero==1.6.2
 lxml==4.8.0
 monotonic==1.6
 pymavlink==2.4.29
+pyserial==3.5
