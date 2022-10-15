@@ -10,8 +10,6 @@ import dronekit
 import gpiozero
 import time
 
-import argparse
-
 TRIGGER_PINS = {"Front":6,"Back":17,"Right":9,"Left":22}
 ECHO_PINS = {"Front":13,"Back":27,"Right":0,"Left":10}
 
@@ -24,15 +22,6 @@ LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])
 Sensors = {"Front":FrontSensor,"Right":RightSensor,"Left":LeftSensor}
 
 #Connects to the vehicle using serial port.
-#vehicle = dronekit.connect('/dev/serial0', wait_ready=False, baud=921600)
-
-parser = argparse.ArgumentParser(description='Print out vehicle state information. Connects to SITL on local PC by default.')
-parser.add_argument('--connect', 
-                   help="vehicle connection target string. If not specified, SITL automatically started and used.")
-args = parser.parse_args()
-
-connection_string = args.connect
-
 vehicle = dronekit.connect("/dev/serial0",wait_ready=True,baud=921600)
 
 #Function to convert distance and orientation into a mavlink message
