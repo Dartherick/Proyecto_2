@@ -7,29 +7,26 @@ For addition of more sensors, the distance can be collected and sent via the sen
 '''
 
 import gpiozero
-import time
-
-TRIGGER_PINS = {"Front":6,"Back":17,"Right":9,"Left":22}
-ECHO_PINS = {"Front":13,"Back":27,"Right":0,"Left":10}
 
 Orientation = {"Front":0, "Front-Right":1 ,"Right":2 ,"Back-Right":3 ,"Back":4 ,"Back-Left":5 ,"Left":6 ,"Front-Left":7, "Up":24 ,"Down":25}
 
-FrontSensor = gpiozero.DistanceSensor(ECHO_PINS["Front"],TRIGGER_PINS["Front"])
-RightSensor = gpiozero.DistanceSensor(ECHO_PINS["Right"],TRIGGER_PINS["Right"])
-LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])
+class UltrasonicSensors():
+    def __init__(self,ECHO_PINS,TRIGGER_PINS):
+        FrontSensor = gpiozero.DistanceSensor(ECHO_PINS["Front"],TRIGGER_PINS["Front"])
+        #BackSensor = gpiozero.DistanceSensor(ECHO_PINS["Back"],TRIGGER_PINS["Back"])
+        RightSensor = gpiozero.DistanceSensor(ECHO_PINS["Right"],TRIGGER_PINS["Right"])
+        LeftSensor = gpiozero.DistanceSensor(ECHO_PINS["Left"],TRIGGER_PINS["Left"])
 
-Sensors = {"Front":FrontSensor,"Right":RightSensor,"Left":LeftSensor}
+        #self.SensorsList = {"0":FrontSensor,"2":RightSensor,"6":LeftSensor,"4":BackSensor}
+        self.SensorsList = {"0":FrontSensor,"2":RightSensor,"6":LeftSensor}
+
+    #Simple function to measure the distance using ultrasonic sensor
+    def Measure(self,Sensors,Gain,t):
+        for i in Sensors:
+            Distance = self.SensorsList[i].distance * 100 * Gain
+            #SensorData(Distance,Orientation[i])
+            print(f"{i} = {Distance} cm - {Distance/100} m")
+
+#Measure(5,0.05)
 
 
-
-#Simple function to measure the distance using ultrasonic sensor
-def Measure(K,t):
-    SensorsName = {"Front","Right","Left"}
-
-    for i in SensorsName:
-        Distance = Sensors[i].distance * 100 * K
-        SensorData(Distance,Orientation[i])
-        print(f"{i} = {Distance} cm - {Distance/100} m")
-        time.sleep(t)
-
-Measure(5,0.05)

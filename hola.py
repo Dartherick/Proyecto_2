@@ -17,3 +17,4 @@ def SensorData(d,o):
         )
     vehicle.send_mavlink(msg)
 
+
